@@ -94,7 +94,7 @@
 <div><small>PENGINGAT</small><h2>NOTIFIKASI</h2></div>
 <span id="notification-status" class="notification-status">BELUM AKTIF</span>
 </div>
-<p class="notification-copy">Dapatkan pengingat jadwal kuliah dan deadline tugas langsung di HP.</p>
+<p class="notification-copy">Bel UNKLAB, waktu doa, dan deadline tugas langsung di HP.</p>
 
 <button id="notification-settings-toggle" class="notification-open" type="button" aria-expanded="false" onclick="toggleNotificationSettings()">
 <span>ATUR NOTIFIKASI</span><span class="notification-arrow">→</span>
@@ -102,17 +102,27 @@
 
 <div id="notification-settings" class="notification-settings hidden">
 <label class="notification-toggle">
-<input id="notif-schedule" type="checkbox" checked>
-<span><strong>Jadwal kuliah</strong><small>Ingatkan sebelum kelas dimulai.</small></span>
+<input id="notif-bells" type="checkbox" checked>
+<span><strong>Bel UNKLAB</strong><small>Mengikuti jam mulai setiap mata kuliah secara otomatis.</small></span>
 </label>
-<label class="notification-field">
-<span>INGATKAN SEBELUM KULIAH</span>
-<select id="notif-schedule-minutes">
-<option value="15">15 menit sebelumnya</option>
-<option value="30" selected>30 menit sebelumnya</option>
-<option value="60">1 jam sebelumnya</option>
-</select>
+<div class="notification-guide">
+<strong>🔔 POLA BEL UNKLAB</strong>
+<span>Bel 1 • 10 menit sebelum kelas — mulai menuju kelas</span>
+<span>Bel 2 • 5 menit sebelum kelas — sudah berada di kelas</span>
+<span>Bel 3 • tepat jam jadwal — perkuliahan dimulai</span>
+</div>
+
+<label class="notification-toggle">
+<input id="notif-prayer" type="checkbox" checked>
+<span><strong>Waktu bersama Tuhan</strong><small>Pengingat doa yang disesuaikan dengan jadwal kuliah.</small></span>
 </label>
+<div class="notification-guide prayer-guide">
+<strong>🙏 JADWAL DOA</strong>
+<span>05:20 • doa pagi setelah worship</span>
+<span>15 menit sebelum kelas • doa singkat sebelum bersiap</span>
+<span>12:10 • doa tengah hari, otomatis bergeser jika bentrok dengan kuliah</span>
+<span>20:45 • doa malam</span>
+</div>
 
 <label class="notification-toggle">
 <input id="notif-tasks" type="checkbox" checked>
