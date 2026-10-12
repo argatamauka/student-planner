@@ -71,23 +71,129 @@ small{font-size:10px;font-weight:700;letter-spacing:.08em}
 .delete{width:29px;min-width:29px;padding:3px;margin:0;background:var(--pink);font-size:12px;box-shadow:2px 2px 0 #000}
 
 /* TUGAS */
-.task{display:flex;align-items:flex-start;gap:8px;min-height:64px}
-.task input{width:21px;min-width:21px;height:21px;padding:0;margin:1px 0 0;accent-color:#000}
+.task-card{
+position:relative;
+display:grid;
+grid-template-columns:28px minmax(0,1fr) auto;
+align-items:start;
+gap:10px;
+min-height:76px;
+margin:0 3px 10px 0;
+padding:10px;
+border:3px solid #000;
+border-radius:9px;
+background:#fff;
+box-shadow:3px 3px 0 #000;
+transition:transform .12s ease,box-shadow .12s ease;
+}
+.task-card:last-child{margin-bottom:3px}
+.task-card:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #000}
+.task-card.done{background:#f7f7f7;opacity:.78}
+.task-card.done .task-title-line strong{text-decoration:line-through;opacity:.55}
+
+.task-check{position:relative;width:25px;height:25px;margin-top:1px;cursor:pointer}
+.task-check input{position:absolute;inset:0;width:25px;height:25px;margin:0;opacity:0;cursor:pointer}
+.task-check span{
+display:grid;
+place-items:center;
+width:25px;
+height:25px;
+border:3px solid #000;
+border-radius:6px;
+background:#fff;
+box-shadow:2px 2px 0 #000;
+}
+.task-check input:checked+span{background:var(--green)}
+.task-check input:checked+span::after{
+content:"✓";
+font-size:17px;
+font-weight:700;
+line-height:1;
+}
+.task-check input:focus-visible+span{outline:3px solid #000;outline-offset:3px}
+
+.task-content{min-width:0}
+.task-title-line{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.task-title-line strong{
+min-width:0;
+font-size:13px;
+line-height:1.25;
+overflow-wrap:anywhere;
+}
+.task-status{
+flex:0 0 auto;
+padding:3px 6px;
+border:2px solid #000;
+border-radius:999px;
+background:#fff;
+font-size:8px;
+font-weight:700;
+line-height:1.15;
+white-space:nowrap;
+}
+.task-status.urgent{background:var(--pink)}
+.task-status.soon{background:var(--yellow)}
+.task-status.complete{background:var(--green)}
+.task-status.normal{background:#fff}
+
+.task-course-line{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:8px}
+.task-course-label{
+font-size:7px;
+font-weight:700;
+letter-spacing:.08em;
+opacity:.45;
+}
+.task-course-name{
+max-width:100%;
+padding:3px 6px;
+border:2px solid #000;
+border-radius:5px;
+background:#eef6ff;
+font-size:9px;
+font-weight:700;
+overflow-wrap:anywhere;
+}
+
+.task-card-actions{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+.task-edit,.task-delete{
+width:auto;
+min-width:38px;
+margin:0;
+padding:4px 6px;
+border:2px solid #000;
+border-radius:5px;
+font-size:8px;
+box-shadow:2px 2px 0 #000;
+}
+.task-edit{background:var(--yellow)}
+.task-delete{
+min-width:28px;
+width:28px;
+height:26px;
+padding:0;
+background:var(--pink);
+font-size:17px;
+line-height:1;
+}
+.task-edit:active,.task-delete:active{transform:translate(2px,2px);box-shadow:none}
+
 .task-course-empty{margin:0 0 10px;font-size:11px;font-weight:700;line-height:1.5}
 .task-course-empty a{color:#000;text-decoration:underline;text-underline-offset:2px}
 
-.task.done strong{text-decoration:line-through;opacity:.5}
-.task-tag{display:inline-block;margin-top:4px;padding:2px 5px;border:2px solid #000;border-radius:999px;background:#fff;font-size:9px;font-weight:700}
-.urgent{background:var(--pink)}.soon{background:var(--yellow)}.complete{background:var(--green)}
-
 #tugas-ringkas{height:200px;max-height:200px}
-#tugas-ringkas,#tugas-selesai-list,#daftar-riwayat{overflow-y:auto;overflow-x:hidden;padding-right:6px;scrollbar-gutter:stable;overscroll-behavior:contain;scrollbar-color:#000 #ffffff66}
+#tugas-ringkas,#tugas-selesai-list,#daftar-riwayat{overflow-y:auto;overflow-x:hidden;padding:3px 7px 3px 1px;scrollbar-gutter:stable;overscroll-behavior:contain;scrollbar-color:#000 #ffffff66}
 #tugas-selesai-list{max-height:200px}
 
 #tugas-ringkas::-webkit-scrollbar,#tugas-selesai-list::-webkit-scrollbar,#daftar-riwayat::-webkit-scrollbar{width:7px}
 #tugas-ringkas::-webkit-scrollbar-track,#tugas-selesai-list::-webkit-scrollbar-track,#daftar-riwayat::-webkit-scrollbar-track{background:#ffffff66;border:2px solid #000;border-radius:20px}
 #tugas-ringkas::-webkit-scrollbar-thumb,#tugas-selesai-list::-webkit-scrollbar-thumb,#daftar-riwayat::-webkit-scrollbar-thumb{background:#000;border-radius:20px}
-#tugas-ringkas:has(.empty){height:auto}
+
+@media(max-width:380px){
+.task-card{grid-template-columns:26px minmax(0,1fr) auto;gap:8px;padding:9px}
+.task-title-line{display:block}
+.task-status{display:inline-block;margin-top:6px}
+.task-card-actions{gap:5px}
+}
 
 /* JADWAL */
 #jadwal-lengkap{max-height:330px;overflow-y:auto;overflow-x:hidden;padding-right:5px;overscroll-behavior:contain}
