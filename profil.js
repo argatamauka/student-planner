@@ -61,14 +61,32 @@ $("android-notification-card")?.classList.toggle("hidden",!native);
 }
 
 function notifKey(){return "studentPlannerNotificationPrefs:"+(user?.id||"guest")}
-function defaultNotifPrefs(){return{enabled:false,schedule:true,scheduleMinutes:30,tasks:true,taskDays:1,taskHour:19}}
+function defaultNotifPrefs(){return{
+enabled:false,
+bells:true,
+prayer:true,
+prayerBeforeClassMinutes:15,
+prayerMorningHour:5,
+prayerMorningMinute:20,
+prayerMiddayHour:12,
+prayerMiddayMinute:10,
+prayerNightHour:20,
+prayerNightMinute:45,
+tasks:true,
+taskDays:1,
+taskHour:19
+}}
 function getNotifPrefs(){
-try{return{...defaultNotifPrefs(),...JSON.parse(localStorage.getItem(notifKey())||"{}")}}catch{return defaultNotifPrefs()}
+try{
+let raw=JSON.parse(localStorage.getItem(notifKey())||"{}"),p={...defaultNotifPrefs(),...raw};
+if(raw.bells===undefined&&raw.schedule!==undefined)p.bells=!!raw.schedule;
+return p;
+}catch{return defaultNotifPrefs()}
 }
 function isiNotifPrefs(){
 let p=getNotifPrefs();
-$("notif-schedule").checked=!!p.schedule;
-$("notif-schedule-minutes").value=String(p.scheduleMinutes||30);
+$("notif-bells").checked=!!p.bells;
+$("notif-prayer").checked=!!p.prayer;
 $("notif-tasks").checked=!!p.tasks;
 $("notif-task-days").value=String(p.taskDays||1);
 $("notif-task-hour").value=String(p.taskHour??19);
@@ -78,19 +96,40 @@ $("notification-status").classList.toggle("active",p.enabled&&native);
 $("save-notification-btn").innerText=p.enabled?"SIMPAN PENGATURAN":"AKTIFKAN & SIMPAN";
 $("disable-notification-btn")?.classList.toggle("hidden",!(p.enabled&&native));
 $("notification-help").innerText=native
-?"Notifikasi memakai suara default HP. Untuk waktu yang presisi, izinkan Alarm & pengingat saat diminta."
+?"Bel UNKLAB dan doa memakai suara default HP. Untuk waktu yang presisi, izinkan Alarm & pengingat saat diminta."
 :"Pengaturan tersimpan, tetapi pengingat otomatis tersedia saat Student Planner dibuka melalui aplikasi Android.";
 }
 function buatPayloadNotifikasi(schedules,tasks,p){
 let parsedSchedules=schedules.map(x=>{
-let m=String(x.time_range||"").match(/(\d{1,2}):(\d{2})/);
-if(!m)return null;
-return{id:x.id,day:x.day,course:x.course_name,room:x.room||"",time:x.time_range,hour:Number(m[1]),minute:Number(m[2])};
+let matches=[...String(x.time_range||"").matchAll(/(\d{1,2}):(\d{2})/g)];
+if(!matches.length)return null;
+let first=matches[0],last=matches.length>1?matches[1]:null;
+return{
+id:x.id,
+day:x.day,
+course:x.course_name,
+room:x.room||"",
+time:x.time_range,
+hour:Number(first[1]),
+minute:Number(first[2]),
+endHour:last?Number(last[1]):-1,
+endMinute:last?Number(last[2]):-1
+};
 }).filter(Boolean);
 return{
 userId:user.id,
-scheduleEnabled:!!p.schedule,
-scheduleMinutes:Number(p.scheduleMinutes||30),
+// Legacy fallback: APK lama tetap memberi satu pengingat 10 menit sebelum kelas.
+scheduleEnabled:!!p.bells,
+scheduleMinutes:10,
+bellEnabled:!!p.bells,
+prayerEnabled:!!p.prayer,
+prayerBeforeClassMinutes:Number(p.prayerBeforeClassMinutes||15),
+prayerMorningHour:Number(p.prayerMorningHour??5),
+prayerMorningMinute:Number(p.prayerMorningMinute??20),
+prayerMiddayHour:Number(p.prayerMiddayHour??12),
+prayerMiddayMinute:Number(p.prayerMiddayMinute??10),
+prayerNightHour:Number(p.prayerNightHour??20),
+prayerNightMinute:Number(p.prayerNightMinute??45),
 taskEnabled:!!p.tasks,
 taskDays:Number(p.taskDays||1),
 taskHour:Number(p.taskHour??19),
@@ -108,9 +147,10 @@ window.AndroidNotifications.syncReminders(JSON.stringify(buatPayloadNotifikasi(s
 }
 async function simpanNotifikasi(){
 let p={
+...getNotifPrefs(),
 enabled:true,
-schedule:$("notif-schedule").checked,
-scheduleMinutes:Number($("notif-schedule-minutes").value),
+bells:$("notif-bells").checked,
+prayer:$("notif-prayer").checked,
 tasks:$("notif-tasks").checked,
 taskDays:Number($("notif-task-days").value),
 taskHour:Number($("notif-task-hour").value)
@@ -129,7 +169,7 @@ isiNotifPrefs();
 return;
 }
 await syncNotifDariCloud(p);
-tampilModal("Pengingat aktif. Jadwal akan diingatkan sesuai waktu pilihanmu dengan suara notifikasi default HP.");
+tampilModal("Pengingat aktif. Bel UNKLAB, waktu doa, dan deadline tugas akan memakai suara notifikasi default HP.");
 }else{
 tampilModal("Pengaturan tersimpan. Pengingat otomatis akan aktif saat kamu menggunakan aplikasi Android Student Planner.");
 }
@@ -163,7 +203,7 @@ window.AndroidNotifications.clearReminders();
 }
 }catch{}
 isiNotifPrefs();
-tampilModal("Notifikasi dimatikan. Semua pengingat jadwal dan tugas di HP ini sudah dibatalkan.");
+tampilModal("Notifikasi dimatikan. Semua pengingat Bel UNKLAB, doa, jadwal, dan tugas di HP ini sudah dibatalkan.");
 }
 
 function bukaHapusAkun(){
