@@ -298,18 +298,59 @@ localStorage.setItem("studentPlannerCloudMigrated","1");
 
 function notificationPrefs(){
 if(!user)return{enabled:false};
-try{return{enabled:false,schedule:true,scheduleMinutes:30,tasks:true,taskDays:1,taskHour:19,...JSON.parse(localStorage.getItem("studentPlannerNotificationPrefs:"+user.id)||"{}")}}catch{return{enabled:false}}
+try{
+let raw=JSON.parse(localStorage.getItem("studentPlannerNotificationPrefs:"+user.id)||"{}");
+let p={
+enabled:false,
+bells:true,
+prayer:true,
+prayerBeforeClassMinutes:15,
+prayerMorningHour:5,
+prayerMorningMinute:20,
+prayerMiddayHour:12,
+prayerMiddayMinute:10,
+prayerNightHour:20,
+prayerNightMinute:45,
+tasks:true,
+taskDays:1,
+taskHour:19,
+...raw
+};
+if(raw.bells===undefined&&raw.schedule!==undefined)p.bells=!!raw.schedule;
+return p;
+}catch{return{enabled:false,bells:true,prayer:true,tasks:true,taskDays:1,taskHour:19}}
 }
 function buildReminderPayload(p){
 let parsedSchedules=jadwal.map(x=>{
-let m=String(x.waktu||"").match(/(\d{1,2}):(\d{2})/);
-if(!m)return null;
-return{id:x.id,day:x.hari,course:x.matkul,room:x.ruangan||"",time:x.waktu,hour:Number(m[1]),minute:Number(m[2])};
+let matches=[...String(x.waktu||"").matchAll(/(\d{1,2}):(\d{2})/g)];
+if(!matches.length)return null;
+let first=matches[0],last=matches.length>1?matches[1]:null;
+return{
+id:x.id,
+day:x.hari,
+course:x.matkul,
+room:x.ruangan||"",
+time:x.waktu,
+hour:Number(first[1]),
+minute:Number(first[2]),
+endHour:last?Number(last[1]):-1,
+endMinute:last?Number(last[2]):-1
+};
 }).filter(Boolean);
 return{
 userId:user.id,
-scheduleEnabled:!!p.schedule,
-scheduleMinutes:Number(p.scheduleMinutes||30),
+// scheduleEnabled/scheduleMinutes keep older installed APKs useful until the update is installed.
+scheduleEnabled:!!p.bells,
+scheduleMinutes:10,
+bellEnabled:!!p.bells,
+prayerEnabled:!!p.prayer,
+prayerBeforeClassMinutes:Number(p.prayerBeforeClassMinutes||15),
+prayerMorningHour:Number(p.prayerMorningHour??5),
+prayerMorningMinute:Number(p.prayerMorningMinute??20),
+prayerMiddayHour:Number(p.prayerMiddayHour??12),
+prayerMiddayMinute:Number(p.prayerMiddayMinute??10),
+prayerNightHour:Number(p.prayerNightHour??20),
+prayerNightMinute:Number(p.prayerNightMinute??45),
 taskEnabled:!!p.tasks,
 taskDays:Number(p.taskDays||1),
 taskHour:Number(p.taskHour??19),
@@ -331,7 +372,7 @@ if(!window.AndroidNotifications||!user)return;
 let key="studentPlannerNotificationIntro:"+user.id;
 if(localStorage.getItem(key))return;
 localStorage.setItem(key,"1");
-if(!notificationPrefs().enabled)info("🔔 Pengingat jadwal dan deadline sudah tersedia. Aktifkan dari menu PROFIL.");
+if(!notificationPrefs().enabled)info("🙏🔔 Bel UNKLAB, waktu doa, dan pengingat deadline sudah tersedia. Aktifkan dari menu PROFIL.");
 }catch{}
 }
 async function loadDashboard(){await Promise.all([loadJadwal(),loadTugas(),loadMataKuliahTugas(),loadFinance()]);renderSemua();syncAndroidReminders()}
