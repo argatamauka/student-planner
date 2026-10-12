@@ -1,4 +1,4 @@
-const CACHE="student-planner-v2-pwa-14";
+const CACHE="student-planner-v2-pwa-15";
 const ASSETS=["/","/index.html","/style.css","/script.js","/supabase-config.js","/matakuliah.html","/matakuliah.css","/matakuliah.js","/profil.html","/profil.css","/profil.js","/manifest.webmanifest","/app-icon.svg","/pwa.js"];
 
 self.addEventListener("install",event=>{
@@ -16,8 +16,9 @@ self.addEventListener("fetch",event=>{
   if(req.method!=="GET")return;
   const url=new URL(req.url);
   if(url.origin!==self.location.origin)return;
+  const freshRequest=new Request(req,{cache:"no-store"});
   event.respondWith(
-    fetch(req).then(res=>{
+    fetch(freshRequest).then(res=>{
       const copy=res.clone();
       caches.open(CACHE).then(cache=>cache.put(req,copy));
       return res;
