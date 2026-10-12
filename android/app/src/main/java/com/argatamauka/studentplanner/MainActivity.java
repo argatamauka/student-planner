@@ -124,7 +124,7 @@ public class MainActivity extends Activity {
         settings.setAllowFileAccess(false);
         settings.setAllowContentAccess(true);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
-        settings.setUserAgentString(settings.getUserAgentString() + " StudentPlannerAndroid/2.3.4");
+        settings.setUserAgentString(settings.getUserAgentString() + " StudentPlannerAndroid/2.3.5");
 
         webView.addJavascriptInterface(new NotificationBridge(), "AndroidNotifications");
 
@@ -979,7 +979,7 @@ public class MainActivity extends Activity {
         changeCard.addView(changeTitle);
 
         TextView changelog = new TextView(this);
-        changelog.setText("• Pengingat jadwal lebih presisi\n• Menggunakan suara notifikasi default HP\n• Izin Alarm & pengingat untuk waktu yang tepat");
+        changelog.setText("• Bel 1, Bel 2, dan Bel 3 UNKLAB otomatis\n• Pengingat doa pagi, sebelum kelas, tengah hari, dan malam\n• Doa tengah hari menyesuaikan jadwal kuliah");
         changelog.setTextSize(11);
         changelog.setTextColor(Color.BLACK);
         LinearLayout.LayoutParams changelogParams = new LinearLayout.LayoutParams(
