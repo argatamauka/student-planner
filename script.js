@@ -471,7 +471,29 @@ let n=new Date();n.setHours(0,0,0,0);let d=new Date(t.deadline+"T00:00:00"),s=Ma
 if(s<0)return["TERLAMBAT","urgent"];if(s===0)return["HARI INI","urgent"];if(s===1)return["BESOK","soon"];if(s<=3)return[`${s} HARI LAGI`,"soon"];
 return[d.toLocaleDateString("id-ID",{day:"2-digit",month:"short"}).toUpperCase(),""];
 }
-function htmlTugas(t,i){let[s,k]=statusDeadline(t);return `<div class="item task ${t.selesai?"done":""}"><input type="checkbox" ${t.selesai?"checked":""} onchange="toggleTugas(${i})"><div class="item-info"><strong>${aman(t.nama)}</strong><div><span class="task-tag">${aman(t.matkul)}</span> <span class="task-tag ${k}">${s}</span></div></div><div class="item-actions"><button class="edit-small" onclick="bukaEditTugas(${i})">EDIT</button><button class="delete" onclick="hapusTugas(${i})">X</button></div></div>`}
+function htmlTugas(t,i){
+let[s,k]=statusDeadline(t),statusClass=k||"normal";
+return `<article class="task-card task-${statusClass} ${t.selesai?"done":""}">
+<label class="task-check" title="${t.selesai?"Tandai belum selesai":"Tandai selesai"}">
+<input type="checkbox" ${t.selesai?"checked":""} onchange="toggleTugas(${i})">
+<span></span>
+</label>
+<div class="task-content">
+<div class="task-title-line">
+<strong>${aman(t.nama)}</strong>
+<span class="task-status ${statusClass}">${s}</span>
+</div>
+<div class="task-course-line">
+<span class="task-course-label">MATA KULIAH</span>
+<span class="task-course-name">${aman(t.matkul)}</span>
+</div>
+</div>
+<div class="task-card-actions">
+<button class="task-edit" type="button" onclick="bukaEditTugas(${i})" aria-label="Edit tugas ${aman(t.nama)}">EDIT</button>
+<button class="task-delete" type="button" onclick="hapusTugas(${i})" aria-label="Hapus tugas ${aman(t.nama)}">×</button>
+</div>
+</article>`;
+}
 function renderTugas(){
 let d=tugas.map((x,i)=>({...x,index:i})).sort((a,b)=>a.selesai!==b.selesai?a.selesai-b.selesai:new Date(a.deadline)-new Date(b.deadline)),aktif=d.filter(x=>!x.selesai),selesai=d.filter(x=>x.selesai);
 $("count-tugas").innerText=$("summary-tugas").innerText=aktif.length;$("count-selesai").innerText=selesai.length;
