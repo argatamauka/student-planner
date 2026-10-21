@@ -259,8 +259,6 @@ await sb.auth.signOut();
 $("dashboard-screen").classList.add("hidden");
 $("login-screen").classList.remove("hidden");
 }
-function konfirmasiLogout(){confirmBox("Yakin ingin keluar dari Student Planner?",logout,"LOGOUT")}
-async function logout(){if(rt)await sb.removeChannel(rt);try{window.AndroidNotifications?.clearReminders()}catch{}await sb.auth.signOut();$("dashboard-screen").classList.add("hidden");$("login-screen").classList.remove("hidden");$("email").value=$("password").value="";scrollTo(0,0)}
 async function bukaDashboard(){
 $("login-screen").classList.add("hidden");$("dashboard-screen").classList.remove("hidden");
 setLoading(true,"MENYIAPKAN PLANNER...");
@@ -628,7 +626,25 @@ $("login-screen").classList.add("hidden");
 }
 });
 function renderSemua(){renderJadwal();renderTugas();renderDompet();renderTransaksi();renderTabungan()}
-(async()=>{checkAppUpdate();let{data:{session}}=await sb.auth.getSession();if(session&&!recoveryMode){user=session.user;await bukaDashboard()}})();
+async function pulihkanSesi(){
+ setLoading(true,"MEMERIKSA SESI AKUN...");
+ try{
+  const {data,error}=await sb.auth.getSession();
+  if(error)throw error;
+  if(recoveryMode)return;
+  if(data?.session?.user){
+   user=data.session.user;
+   await bukaDashboard();
+  }else{
+   $("login-screen").classList.remove("hidden");
+  }
+ }catch(e){
+  $("login-screen").classList.remove("hidden");
+  info("Gagal memeriksa sesi akun. Periksa koneksi internet lalu buka ulang aplikasi.");
+ }finally{setLoading(false)}
+}
+checkAppUpdate();
+pulihkanSesi();
 document.addEventListener("keydown",e=>{
 if(e.key==="Escape"){tutupConfirm();$("info-modal").classList.add("hidden")}
 if(e.key==="Enter"&&!$("login-screen").classList.contains("hidden")&&["email","password"].includes(document.activeElement?.id))login();
