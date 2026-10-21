@@ -157,22 +157,25 @@
 </section>
 
 
-<section class="account-card">
-<div>
-<small>SESI AKUN</small>
-<h2>AKUN TETAP MASUK</h2>
-<p>Kamu tidak perlu login lagi setiap membuka aplikasi. Gunakan tombol ini hanya jika ingin keluar dari akun.</p>
+<section class="account-card" aria-labelledby="account-settings-title">
+<div class="account-card-heading">
+<small>AKUN</small>
+<h2 id="account-settings-title">PENGATURAN AKUN</h2>
+</div>
+<div class="account-option">
+<div class="account-option-copy">
+<h3>Keluar dari akun</h3>
+<p>Tetap login hingga kamu memilih keluar.</p>
 </div>
 <button type="button" class="logout-btn" onclick="bukaLogout()">LOGOUT</button>
-</section>
-
-<section class="danger-card">
-<div>
-<small>AKUN</small>
-<h2>ZONA BERBAHAYA</h2>
-<p>Menghapus akun akan menghapus profil, jadwal, mata kuliah, tugas, dompet, transaksi, tabungan, dan foto profil secara permanen.</p>
 </div>
-<button class="delete-account-btn" onclick="bukaHapusAkun()">HAPUS AKUN</button>
+<div class="account-option account-option-danger">
+<div class="account-option-copy">
+<h3>Hapus akun</h3>
+<p>Seluruh data akan dihapus permanen.</p>
+</div>
+<button type="button" class="delete-account-btn" onclick="bukaHapusAkun()">HAPUS AKUN</button>
+</div>
 </section>
 
 <div id="edit-actions" class="edit-actions hidden">
