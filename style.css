@@ -239,9 +239,6 @@ line-height:1;
 .progress{width:100%;height:27px;overflow:hidden;border:3px solid #000;border-radius:7px;background:#fff}
 #progress-fill{width:0;height:100%;background:var(--yellow);transition:.25s}
 
-/* LOGOUT */
-.logout{margin-top:20px;background:#000;color:#fff}
-
 /* MODAL */
 .modal{position:fixed;inset:0;z-index:999;display:grid;place-items:center;padding:20px;background:#0009}
 .modal-card{width:min(330px,100%);margin:0;background:var(--yellow);text-align:center}
@@ -253,7 +250,6 @@ body{padding:calc(28px + env(safe-area-inset-top)) calc(28px + env(safe-area-ins
 body:has(#login-screen:not(.hidden)){padding:28px}
 .dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
 .card{padding:16px}.profile{padding:13px 16px}.summary{max-width:420px}
-.logout{display:block;max-width:220px;margin:22px auto 0}
 }
 
 /* HP KECIL */

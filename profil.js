@@ -206,6 +206,36 @@ isiNotifPrefs();
 tampilModal("Notifikasi dimatikan. Semua pengingat Bel UNKLAB, doa, jadwal, dan tugas di HP ini sudah dibatalkan.");
 }
 
+let logoutInProgress=false;
+function bukaLogout(){
+ if(logoutInProgress)return;
+ $("logout-modal").classList.remove("hidden");
+}
+function tutupLogout(){
+ if(logoutInProgress)return;
+ $("logout-modal").classList.add("hidden");
+}
+async function logout(){
+ if(logoutInProgress)return;
+ logoutInProgress=true;
+ const btn=$("logout-confirm");
+ btn.disabled=true;
+ btn.innerText="KELUAR...";
+ try{
+  const {error}=await sb.auth.signOut({scope:"local"});
+  if(error)throw error;
+  if(rt)try{await sb.removeChannel(rt)}catch{}
+  try{window.AndroidNotifications?.clearReminders()}catch{}
+  location.replace("index.html");
+ }catch(e){
+  $("logout-modal").classList.add("hidden");
+  tampilModal("Gagal logout. Silakan coba lagi. "+(e?.message||""));
+ }finally{
+  logoutInProgress=false;
+  btn.disabled=false;
+  btn.innerText="LOGOUT";
+ }
+}
 function bukaHapusAkun(){
 $("delete-password").value="";
 $("delete-confirm-text").value="";
@@ -251,7 +281,7 @@ $("foto-input").addEventListener("change",e=>{
 let file=e.target.files[0];if(!file)return;if(!file.type.startsWith("image/"))return tampilModal("Pilih file gambar.");
 let r=new FileReader();r.onload=()=>{let im=new Image();im.onload=()=>{let max=700,s=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext("2d").drawImage(im,0,0,c.width,c.height);c.toBlob(async blob=>{try{let path=`${user.id}/avatar.jpg`;await q(sb.storage.from("profile-photos").upload(path,blob,{upsert:true,contentType:"image/jpeg"}));await q(sb.from("profiles").update({avatar_path:path,updated_at:new Date().toISOString()}).eq("user_id",user.id));profil.avatar_path=path;await loadFoto(path);tampilModal("Foto profil berhasil diperbarui.")}catch(err){tampilModal(err.message)}},"image/jpeg",.8)};im.src=r.result};r.readAsDataURL(file);
 });
-document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("saved-modal").classList.add("hidden");tutupHapusAkun()}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("saved-modal").classList.add("hidden");tutupHapusAkun();tutupLogout()}});
 (async()=>{
 let{data:{session}}=await sb.auth.getSession();if(!session)return location.href="index.html";
 user=session.user;tampilkanKontrolNotifikasiAndroid();try{profil=await migrasiProfil();await migrasiFoto();await load();isiNotifPrefs();rt=sb.channel("profile-"+user.id).on("postgres_changes",{event:"*",schema:"public",table:"profiles",filter:`user_id=eq.${user.id}`},()=>load()).subscribe()}catch(e){tampilModal("Gagal memuat profil: "+e.message)}

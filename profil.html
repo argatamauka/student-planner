@@ -157,6 +157,15 @@
 </section>
 
 
+<section class="account-card">
+<div>
+<small>SESI AKUN</small>
+<h2>AKUN TETAP MASUK</h2>
+<p>Kamu tidak perlu login lagi setiap membuka aplikasi. Gunakan tombol ini hanya jika ingin keluar dari akun.</p>
+</div>
+<button type="button" class="logout-btn" onclick="bukaLogout()">LOGOUT</button>
+</section>
+
 <section class="danger-card">
 <div>
 <small>AKUN</small>
@@ -171,6 +180,17 @@
 <button class="save" onclick="simpanProfil()">SIMPAN PERUBAHAN</button>
 </div>
 
+</div>
+
+<div id="logout-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="logout-title">
+<div class="modal-card logout-modal-card">
+<h3 id="logout-title">Keluar dari akun?</h3>
+<p>Data planner kamu tetap tersimpan. Kamu harus login lagi untuk mengakses akun ini.</p>
+<div class="logout-modal-actions">
+<button class="logout-cancel" type="button" onclick="tutupLogout()">BATAL</button>
+<button id="logout-confirm" class="logout-confirm" type="button" onclick="logout()">LOGOUT</button>
+</div>
+</div>
 </div>
 
 <div id="delete-account-modal" class="modal hidden">
