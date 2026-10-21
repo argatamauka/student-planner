@@ -18,7 +18,7 @@
 
 <div class="container">
 
-<section id="login-screen" class="card login-card">
+<section id="login-screen" class="card login-card hidden">
 <span class="badge">STUDENT PLANNER</span>
 <h1>MASUK KE<br>PLANNER-MU</h1>
 <p class="muted">Kuliah, tugas, uang, dan tabungan dalam satu tempat.</p>
@@ -222,7 +222,6 @@
 <button class="check-update-btn" onclick="manualCheckAppUpdate()">CEK UPDATE</button>
 </div>
 </section>
-<button class="logout" onclick="konfirmasiLogout()">LOGOUT</button>
 </main>
 </div>
 
@@ -276,7 +275,7 @@
 </div>
 </div>
 
-<div id="app-loading" class="loading-overlay hidden" aria-live="polite">
+<div id="app-loading" class="loading-overlay" aria-live="polite">
 <div class="loading-box">
 <div class="loading-dot"></div>
 <strong id="loading-text">MEMUAT...</strong>
