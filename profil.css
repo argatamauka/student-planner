@@ -73,12 +73,7 @@ body{padding:calc(12px + env(safe-area-inset-top)) calc(12px + env(safe-area-ins
 .data-card{padding:13px}
 }
 
-/* DELETE ACCOUNT */
-.danger-card{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px;margin:22px 0 18px;border:4px solid #000;border-radius:12px;background:#ffb4b4;box-shadow:5px 5px 0 #000}
-.danger-card h2{margin:3px 0 6px;font-size:1.1rem}
-.danger-card p{max-width:620px;margin:0;font-size:11px;font-weight:700;line-height:1.45}
-.delete-account-btn{width:auto;min-width:120px;padding:9px 12px;border:3px solid #000;border-radius:7px;background:#ff4d4d;color:#000;box-shadow:3px 3px 0 #000;font:inherit;font-size:10px;font-weight:700;cursor:pointer}
-.delete-account-btn:active{transform:translate(3px,3px);box-shadow:none}
+/* DELETE ACCOUNT CONFIRMATION */
 .delete-account-modal-card{background:#fff;text-align:left}
 .danger-badge{display:inline-block;margin-bottom:10px;padding:4px 7px;border:2px solid #000;border-radius:999px;background:#ff4d4d;font-size:9px;font-weight:700;letter-spacing:.06em}
 .delete-account-modal-card p{font-size:11px;font-weight:600;line-height:1.45}
@@ -88,12 +83,6 @@ body{padding:calc(12px + env(safe-area-inset-top)) calc(12px + env(safe-area-ins
 .delete-account-modal-card .modal-cancel{background:#fff;color:#000}
 .delete-account-modal-card .modal-delete{background:#ff4d4d;color:#000}
 .delete-account-modal-card button:disabled{opacity:.55;cursor:not-allowed;transform:none;box-shadow:3px 3px 0 #000}
-
-@media(max-width:520px){
-.danger-card{align-items:stretch;flex-direction:column}
-.delete-account-btn{width:100%}
-}
-
 
 /* NOTIFICATIONS */
 .notification-card{padding:16px;margin:22px 0 18px;border:4px solid #000;border-radius:12px;background:var(--yellow);box-shadow:5px 5px 0 #000}
@@ -137,14 +126,26 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 @media(max-width:699px){input,select,textarea{font-size:16px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 
-/* ACCOUNT SESSION */
-.account-card{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:16px;margin:22px 0 18px;border:4px solid #000;border-radius:12px;background:#fff;box-shadow:5px 5px 0 #000}
-.account-card h2{margin:3px 0 6px;font-size:1.1rem}
-.account-card p{max-width:620px;margin:0;font-size:11px;font-weight:700;line-height:1.45}
-.logout-btn{min-width:120px;padding:10px 14px;border:3px solid #000;border-radius:7px;background:#000;color:#fff;box-shadow:3px 3px 0 #888;font:inherit;font-size:11px;font-weight:700;cursor:pointer}
-.logout-btn:active{transform:translate(3px,3px);box-shadow:none}
+/* COMPACT ACCOUNT SETTINGS */
+.account-card{margin:20px 0 18px;padding:14px 16px;border:4px solid #000;border-radius:12px;background:#fff;box-shadow:5px 5px 0 #000}
+.account-card-heading{padding-bottom:10px;border-bottom:3px solid #000}
+.account-card-heading h2{margin:3px 0 0;font-size:1.12rem}
+.account-option{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 0}
+.account-option-copy{flex:1;min-width:0}
+.account-option h3{margin:0 0 4px;font-size:12px;line-height:1.2}
+.account-option p{margin:0;font-size:10px;font-weight:600;line-height:1.4}
+.account-option-danger{margin:0 -12px -10px;padding:12px;border-top:2px solid #000;border-radius:0 0 8px 8px;background:#fff0f0}
+.logout-btn,.delete-account-btn{flex:0 0 auto;min-width:110px;max-width:125px;padding:10px;border:3px solid #000;border-radius:7px;box-shadow:3px 3px 0 #000;font:inherit;font-size:10px;font-weight:700;cursor:pointer}
+.logout-btn{background:#000;color:#fff}
+.delete-account-btn{background:#ff4d4d;color:#000}
+.logout-btn:active,.delete-account-btn:active{transform:translate(3px,3px);box-shadow:none}
 .logout-modal-card p{font-size:11px;font-weight:700;line-height:1.5}
 .logout-modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
 .logout-modal-card .logout-cancel{background:#fff;color:#000}
 .logout-modal-card .logout-confirm{background:#000;color:#fff}
-@media(max-width:520px){.account-card{align-items:stretch;flex-direction:column}.logout-btn{width:100%}}
+@media(max-width:380px){
+.account-card{padding:12px}
+.account-option{gap:8px}
+.account-option-danger{margin:0 -8px -8px;padding:10px 8px}
+.logout-btn,.delete-account-btn{min-width:96px;max-width:110px;padding:9px 6px;font-size:9px}
+}
