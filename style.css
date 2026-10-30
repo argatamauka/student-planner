@@ -341,3 +341,11 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .habit-dashboard-link{display:block;width:100%;padding:10px;border:3px solid #000;border-radius:7px;background:#fff;color:#000;text-align:center;text-decoration:none;font-size:11px;font-weight:700;box-shadow:3px 3px 0 #000}
 .habit-dashboard-link:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #000}
 #form-tugas textarea{width:100%;min-height:58px;padding:9px;border:2px solid #000;border-radius:6px;font:600 12px "Space Grotesk",sans-serif;resize:vertical}
+
+
+/* Compact shortcuts keep new tools accessible without adding dashboard cards. */
+.dashboard-shortcuts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:-6px 0 18px}
+.dashboard-shortcuts a{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0;padding:10px 11px;border:3px solid #000;border-radius:8px;background:#fff;color:#000;text-decoration:none;font-size:10px;font-weight:700;box-shadow:3px 3px 0 #000}
+.dashboard-shortcuts a:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #000}
+.dashboard-shortcuts a span{font-size:16px}
+@media(max-width:360px){.dashboard-shortcuts{grid-template-columns:1fr}}
