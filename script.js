@@ -380,7 +380,7 @@ jadwal=d.map(x=>({id:x.id,hari:x.day,matkul:x.course_name,waktu:x.time_range,rua
 }
 async function loadTugas(){
 let d=await q(sb.from("tasks").select("*"));
-tugas=d.map(x=>({id:x.id,nama:x.name,matkul:x.course_name,deadline:x.deadline,selesai:x.completed}));
+tugas=d.map(x=>({id:x.id,nama:x.name,matkul:x.course_name,deadline:x.deadline,selesai:x.completed,deskripsi:x.description||"",kategori:x.category||"Akademik",prioritas:x.priority||"medium"}));
 }
 async function loadMataKuliahTugas(){
 let data=await q(sb.from("courses").select("name").order("name"));
@@ -393,6 +393,7 @@ if(nama&&!unik.has(key))unik.set(key,nama);
 mataKuliahTugas=[...unik.values()].sort((a,b)=>a.localeCompare(b,"id-ID"));
 renderPilihanMatkulTugas();
 }
+$("input-kategori-tugas")?.addEventListener("change",()=>{$("matkul-tugas-empty")?.classList.toggle("hidden",mataKuliahTugas.length!==0||$("input-kategori-tugas").value!=="Akademik")});
 function renderPilihanMatkulTugas(){
 const select=$("input-matkul-tugas");
 if(!select)return;
@@ -413,7 +414,7 @@ option.textContent=terpilih+" (tersimpan sebelumnya)";
 select.appendChild(option);
 }
 select.value=terpilih&&[...select.options].some(x=>x.value===terpilih)?terpilih:"";
-$("matkul-tugas-empty")?.classList.toggle("hidden",mataKuliahTugas.length!==0);
+$("matkul-tugas-empty")?.classList.toggle("hidden",mataKuliahTugas.length!==0||$("input-kategori-tugas")?.value!=="Akademik");
 }
 async function loadFinance(){
 let [w,t,s]=await Promise.all([
@@ -470,39 +471,32 @@ if(s<0)return["TERLAMBAT","urgent"];if(s===0)return["HARI INI","urgent"];if(s===
 return[d.toLocaleDateString("id-ID",{day:"2-digit",month:"short"}).toUpperCase(),""];
 }
 function htmlTugas(t,i){
-let[s,k]=statusDeadline(t),statusClass=k||"normal";
+let[s,k]=statusDeadline(t),statusClass=k||"normal",priority=t.prioritas||"medium";
+let priorityLabel=priority==="high"?"TINGGI":priority==="low"?"RENDAH":"SEDANG";
 return `<article class="task-card task-${statusClass} ${t.selesai?"done":""}">
 <label class="task-check" title="${t.selesai?"Tandai belum selesai":"Tandai selesai"}">
-<input type="checkbox" ${t.selesai?"checked":""} onchange="toggleTugas(${i})">
-<span></span>
-</label>
-<div class="task-content">
-<div class="task-title-line">
-<strong>${aman(t.nama)}</strong>
-<span class="task-status ${statusClass}">${s}</span>
-</div>
-<div class="task-course-line">
-<span class="task-course-label">MATA KULIAH</span>
-<span class="task-course-name">${aman(t.matkul)}</span>
-</div>
-</div>
-<div class="task-card-actions">
-<button class="task-edit" type="button" onclick="bukaEditTugas(${i})" aria-label="Edit tugas ${aman(t.nama)}">EDIT</button>
-<button class="task-delete" type="button" onclick="hapusTugas(${i})" aria-label="Hapus tugas ${aman(t.nama)}">×</button>
-</div>
+<input type="checkbox" ${t.selesai?"checked":""} onchange="toggleTugas(${i})"><span></span></label>
+<div class="task-content"><div class="task-title-line"><strong>${aman(t.nama)}</strong><span class="task-status ${statusClass}">${s}</span></div>
+<div class="task-meta-row"><span class="task-category">${aman(t.kategori||"Akademik")}</span><span class="task-priority priority-${aman(priority)}">${priorityLabel}</span></div>
+${t.matkul?`<div class="task-course-line"><span class="task-course-label">MATA KULIAH</span><span class="task-course-name">${aman(t.matkul)}</span></div>`:""}
+${t.deskripsi?`<p class="task-description">${aman(t.deskripsi)}</p>`:""}</div>
+<div class="task-card-actions"><button class="task-edit" type="button" onclick="bukaEditTugas(${i})" aria-label="Edit tugas ${aman(t.nama)}">EDIT</button><button class="task-delete" type="button" onclick="hapusTugas(${i})" aria-label="Hapus tugas ${aman(t.nama)}">×</button></div>
 </article>`;
 }
 function renderTugas(){
-let d=tugas.map((x,i)=>({...x,index:i})).sort((a,b)=>a.selesai!==b.selesai?a.selesai-b.selesai:new Date(a.deadline)-new Date(b.deadline)),aktif=d.filter(x=>!x.selesai),selesai=d.filter(x=>x.selesai);
+let rank={high:0,medium:1,low:2},d=tugas.map((x,i)=>({...x,index:i})).sort((a,b)=>a.selesai!==b.selesai?a.selesai-b.selesai:(rank[a.prioritas]??1)-(rank[b.prioritas]??1)||new Date(a.deadline)-new Date(b.deadline)),aktif=d.filter(x=>!x.selesai),selesai=d.filter(x=>x.selesai);
 $("count-tugas").innerText=$("summary-tugas").innerText=aktif.length;$("count-selesai").innerText=selesai.length;
 $("tugas-ringkas").innerHTML=aktif.length?aktif.map(x=>htmlTugas(x,x.index)).join(""):`<div class="empty"><strong>Belum ada tugas aktif 🎉</strong><span>Tambahkan tugas baru supaya deadline tetap terpantau.</span><button class="empty-action" onclick="bukaTambahTugas()">+ TAMBAH TUGAS</button></div>`;
 $("tugas-selesai-list").innerHTML=selesai.length?selesai.map(x=>htmlTugas(x,x.index)).join(""):`<div class="empty">Belum ada tugas selesai.</div>`;
 }
-function resetFormTugas(){editTugas=null;["input-tugas","input-deadline"].forEach(id=>$(id).value="");$("input-matkul-tugas").value="";$("simpan-tugas").innerText="SIMPAN";$("batal-edit-tugas").classList.add("hidden")}
+function resetFormTugas(){editTugas=null;["input-tugas","input-deadline","input-deskripsi-tugas"].forEach(id=>$(id).value="");$("input-matkul-tugas").value="";$("input-kategori-tugas").value="Akademik";$("input-prioritas-tugas").value="medium";$("simpan-tugas").innerText="SIMPAN";$("batal-edit-tugas").classList.add("hidden")}
 function bukaTambahTugas(){toggleTambah("form-tugas",resetFormTugas);if(!$("form-tugas").classList.contains("hidden"))renderPilihanMatkulTugas()}
 function bukaEditTugas(i){
 let t=tugas[i];editTugas=i;
 $("input-tugas").value=t.nama;
+$("input-deskripsi-tugas").value=t.deskripsi||"";
+$("input-kategori-tugas").value=t.kategori||"Akademik";
+$("input-prioritas-tugas").value=t.prioritas||"medium";
 $("input-matkul-tugas").value="";
 renderPilihanMatkulTugas();
 $("input-deadline").value=t.deadline;
@@ -513,12 +507,13 @@ $("form-tugas").scrollIntoView({behavior:"smooth",block:"nearest"});
 }
 function batalEditTugas(){resetFormTugas();$("form-tugas").classList.add("hidden")}
 async function simpanTugas(){
-let nama=$("input-tugas").value.trim(),matkul=$("input-matkul-tugas").value,deadline=$("input-deadline").value;
-if(!mataKuliahTugas.length&&editTugas===null)return info("Belum ada mata kuliah. Tambahkan dulu lewat menu MATA KULIAH.");
-if(!nama||!matkul||!deadline)return info("Isi nama tugas, pilih mata kuliah, dan tentukan deadline.");
-if(!mataKuliahTugas.includes(matkul)&&!(editTugas!==null&&tugas[editTugas]?.matkul===matkul))return info("Pilih mata kuliah dari daftar yang tersedia.");
+let nama=$("input-tugas").value.trim(),matkul=$("input-matkul-tugas").value,kategori=$("input-kategori-tugas").value,prioritas=$("input-prioritas-tugas").value,deskripsi=$("input-deskripsi-tugas").value.trim(),deadline=$("input-deadline").value;
+if(kategori==="Akademik"&&!mataKuliahTugas.length&&editTugas===null)return info("Tambahkan mata kuliah terlebih dahulu untuk membuat tugas akademik.");
+if(!nama||!deadline)return info("Isi nama tugas dan tentukan deadline.");
+if(kategori==="Akademik"&&!matkul)return info("Pilih mata kuliah untuk tugas akademik.");
+if(matkul&&!mataKuliahTugas.includes(matkul)&&!(editTugas!==null&&tugas[editTugas]?.matkul===matkul))return info("Pilih mata kuliah dari daftar yang tersedia.");
 try{
-let d={name:nama,course_name:matkul,deadline};
+let d={name:nama,course_name:matkul||"",deadline,description:deskripsi,category:kategori,priority:prioritas};
 editTugas===null?await q(sb.from("tasks").insert({...d,user_id:user.id,completed:false})):await q(sb.from("tasks").update(d).eq("id",tugas[editTugas].id));
 resetFormTugas();$("form-tugas").classList.add("hidden");await loadTugas();renderTugas();syncAndroidReminders();
 }catch(e){info(e.message)}
