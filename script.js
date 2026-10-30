@@ -393,6 +393,7 @@ if(nama&&!unik.has(key))unik.set(key,nama);
 mataKuliahTugas=[...unik.values()].sort((a,b)=>a.localeCompare(b,"id-ID"));
 renderPilihanMatkulTugas();
 }
+$("input-kategori-tugas")?.addEventListener("change",()=>{$("matkul-tugas-empty")?.classList.toggle("hidden",mataKuliahTugas.length!==0||$("input-kategori-tugas").value!=="Akademik")});
 function renderPilihanMatkulTugas(){
 const select=$("input-matkul-tugas");
 if(!select)return;
@@ -413,7 +414,7 @@ option.textContent=terpilih+" (tersimpan sebelumnya)";
 select.appendChild(option);
 }
 select.value=terpilih&&[...select.options].some(x=>x.value===terpilih)?terpilih:"";
-$("matkul-tugas-empty")?.classList.toggle("hidden",mataKuliahTugas.length!==0);
+$("matkul-tugas-empty")?.classList.toggle("hidden",mataKuliahTugas.length!==0||$("input-kategori-tugas")?.value!=="Akademik");
 }
 async function loadFinance(){
 let [w,t,s]=await Promise.all([
