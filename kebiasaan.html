@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#fde047"><meta name="apple-mobile-web-app-title" content="Student Planner v2">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="app-icon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="kebiasaan.css"><title>Kegiatan & Kebiasaan - Student Planner</title>
+</head>
+<body><div class="container">
+<header class="topbar"><a class="back" href="index.html" aria-label="Kembali">←</a><div><small>STUDENT PLANNER</small><h1>KEBIASAAN</h1></div><span class="badge">HABIT TRACKER</span></header>
+<section class="hero card"><div><small>PROGRES HARI INI</small><h2 id="today-progress">0 / 0</h2><p id="today-caption">Mulai bangun kebiasaan baikmu hari ini.</p></div><div class="hero-mark" aria-hidden="true">✓</div></section>
+<section class="stats"><div class="stat card"><small>KEBIASAAN AKTIF</small><strong id="active-count">0</strong></div><div class="stat card"><small>SELESAI MINGGU INI</small><strong id="week-count">0</strong></div></section>
+<section class="card habit-section">
+<div class="section-head"><div><small>RUTINITASMU</small><h2>Daftar Kebiasaan</h2></div><button id="add-toggle" class="button dark" type="button">+ TAMBAH</button></div>
+<form id="habit-form" class="habit-form hidden">
+<label for="habit-name">NAMA KEGIATAN</label><input id="habit-name" maxlength="80" required placeholder="Contoh: Belajar Python">
+<label for="habit-description">KETERANGAN (OPSIONAL)</label><textarea id="habit-description" rows="2" maxlength="240" placeholder="Apa yang ingin kamu lakukan?"></textarea>
+<div class="form-grid"><div><label for="habit-category">KATEGORI</label><select id="habit-category"><option>Akademik</option><option>English</option><option>Programming</option><option>Fitness</option><option>Spiritual</option><option>Personal</option></select></div>
+<div><label for="habit-frequency">JADWAL</label><select id="habit-frequency"><option value="daily">Setiap hari</option><option value="custom">Hari tertentu</option></select></div></div>
+<div id="days-picker" class="days-picker hidden"><span class="field-label">PILIH HARI</span><div class="day-options">
+<label><input type="checkbox" value="1" checked> Sen</label><label><input type="checkbox" value="2" checked> Sel</label><label><input type="checkbox" value="3" checked> Rab</label><label><input type="checkbox" value="4" checked> Kam</label><label><input type="checkbox" value="5" checked> Jum</label><label><input type="checkbox" value="6" checked> Sab</label><label><input type="checkbox" value="7" checked> Min</label>
+</div></div>
+<div class="form-actions"><button class="button dark" type="submit" id="save-habit">SIMPAN KEBIASAAN</button><button class="button light hidden" type="button" id="cancel-edit">BATAL</button></div>
+</form>
+<div id="habit-list" class="habit-list"><div class="empty">Memuat kebiasaan...</div></div>
+</section>
+<section class="card week-section"><div class="section-head"><div><small>KONSISTENSI</small><h2>Aktivitas 7 Hari</h2></div></div><div id="week-grid" class="week-grid"></div><p class="week-note">Centang kebiasaan setelah selesai dilakukan. Progres akan tersimpan di akunmu.</p></section>
+<p class="footer-note">STUDENT PLANNER V2 • DATA TERSINKRONISASI</p>
+</div><div id="toast" class="toast hidden" role="status"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="kebiasaan.js"></script>
+</body></html>
