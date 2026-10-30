@@ -98,9 +98,16 @@
 </div>
 
 <div id="form-tugas" class="panel hidden">
-<input id="input-tugas" placeholder="Nama tugas">
+<input id="input-tugas" placeholder="Nama kegiatan atau tugas">
+<textarea id="input-deskripsi-tugas" rows="2" maxlength="240" placeholder="Keterangan (opsional)"></textarea>
+<select id="input-kategori-tugas" aria-label="Kategori tugas">
+<option>Akademik</option><option>Programming</option><option>English</option><option>Fitness</option><option>Spiritual</option><option>Personal</option>
+</select>
+<select id="input-prioritas-tugas" aria-label="Prioritas tugas">
+<option value="high">PRIORITAS TINGGI</option><option value="medium" selected>PRIORITAS SEDANG</option><option value="low">PRIORITAS RENDAH</option>
+</select>
 <select id="input-matkul-tugas" aria-label="Pilih mata kuliah">
-<option value="">PILIH MATA KULIAH</option>
+<option value="">PILIH MATA KULIAH (KHUSUS AKADEMIK)</option>
 </select>
 <p id="matkul-tugas-empty" class="task-course-empty hidden">Belum ada mata kuliah. <a href="matakuliah.html">+ TAMBAH MATA KULIAH</a> terlebih dahulu.</p>
 <input id="input-deadline" type="date">
@@ -205,6 +212,12 @@
 <button class="white" onclick="tarikTabungan()">TARIK</button>
 </div>
 </div>
+</section>
+
+<section class="card bg-green habit-dashboard-card">
+<div class="card-head"><div><small>KEBIASAAN</small><h2>Habit Tracker</h2></div><span class="badge white">RUTINITAS</span></div>
+<p class="habit-dashboard-copy">Bangun konsistensi belajar, ibadah, kesehatan, dan kebiasaan baikmu. Checklist tersimpan di akunmu.</p>
+<div class="actions one"><a class="habit-dashboard-link" href="kebiasaan.html">BUKA HABIT TRACKER →</a></div>
 </section>
 
 </div>
