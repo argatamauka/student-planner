@@ -1,5 +1,5 @@
-const CACHE="student-planner-v2-pwa-17";
-const ASSETS=["/","/index.html","/style.css","/script.js","/supabase-config.js","/matakuliah.html","/matakuliah.css","/matakuliah.js","/profil.html","/profil.css","/profil.js","/manifest.webmanifest","/app-icon.svg","/pwa.js"];
+const CACHE="student-planner-v2-pwa-18";
+const ASSETS=["/","/index.html","/style.css","/script.js","/supabase-config.js","/matakuliah.html","/matakuliah.css","/matakuliah.js","/profil.html","/profil.css","/profil.js","/manifest.webmanifest","/app-icon.svg","/pwa.js","/kebiasaan.html","/kebiasaan.css","/kebiasaan.js"];
 
 self.addEventListener("install",event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)));
