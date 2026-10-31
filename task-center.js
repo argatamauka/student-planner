@@ -1,8 +1,8 @@
 const $=id=>document.getElementById(id),q=async p=>{const{data,error}=await p;if(error)throw error;return data};
 const categories=["Semua","Programming","English","Akademik","Fitness","Spiritual","Personal"],colors={Programming:"#4778d8",English:"#c04f91",Akademik:"#27835a",Fitness:"#c46a2c",Spiritual:"#7861b5",Personal:"#9a7616",Kuliah:"#3d78a8"};
 const week=["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
-let user=null,tasks=[],schedules=[],habits=[],habitLogs=[],activeList="Semua",selectedDate=key(new Date()),viewMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1),editing=null;
 const key=d=>[d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-");
+let user=null,tasks=[],schedules=[],habits=[],habitLogs=[],activeList="Semua",selectedDate=key(new Date()),viewMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1),editing=null;
 const parse=k=>new Date(k+"T00:00:00"),esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const labelDate=k=>parse(k).toLocaleDateString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
 function toast(s){$("toast").textContent=s;$("toast").classList.remove("hidden");clearTimeout(toast.t);toast.t=setTimeout(()=>$("toast").classList.add("hidden"),2800)}
